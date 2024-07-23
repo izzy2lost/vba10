@@ -55,7 +55,7 @@ jobs:
 
       - name: Retarget Solution
         run: |
-          msbuild $env:SolutionPath /t:Retarget /p:WindowsTargetPlatformVersion=$env:TargetPlatformVersion
+          msbuild $env:SolutionPath /t:VBA10 /p:WindowsTargetPlatformVersion=$env:TargetPlatformVersion
         shell: pwsh
 
       - name: App Build
