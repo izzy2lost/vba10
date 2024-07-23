@@ -53,14 +53,11 @@ jobs:
         run: |
           echo "PACKAGE_NAME=${{ github.event.inputs.package_name }}_${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
 
-      - name: Retarget Solution
-        run: |
-          & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\msbuild.exe" $env:SolutionPath /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=$env:TargetPlatformVersion
-        shell: pwsh
-
       - name: App Build
         run: |
           & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\msbuild.exe" $env:SolutionPath `
+            /p:PlatformToolset=v143 `
+            /p:WindowsTargetPlatformVersion=$env:TargetPlatformVersion `
             /p:Platform=$env:Platform `
             /p:Configuration=$env:Configuration `
             /p:UapAppxPackageBuildMode=$env:BuildMode `
