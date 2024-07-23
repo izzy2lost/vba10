@@ -26,6 +26,7 @@ jobs:
       ProjectDirectory: .\
       PackageOutputRootDir: C:\AppPackage
       PackageOutputDir: VBA
+      TargetPlatformVersion: '10.0.19041.0' # Use an installed SDK version
 
     steps:            
       - name: Add msbuild to PATH
@@ -51,6 +52,11 @@ jobs:
         id: set_package_name
         run: |
           echo "PACKAGE_NAME=${{ github.event.inputs.package_name }}_${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+
+      - name: Retarget Solution
+        run: |
+          msbuild $env:SolutionPath /t:Retarget /p:WindowsTargetPlatformVersion=$env:TargetPlatformVersion
+        shell: pwsh
 
       - name: App Build
         run: |
