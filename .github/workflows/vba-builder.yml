@@ -28,7 +28,7 @@ jobs:
       PackageOutputDir: VBA
       TargetPlatformVersion: '10.0.19041.0' # Use an installed SDK version
 
-    steps:            
+    steps:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
         
@@ -40,6 +40,19 @@ jobs:
         with:
           submodules: true 
           fetch-depth: 0
+
+      - name: Install SQLite UWP 2015 SDK
+        run: |
+          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
+          Install-Module -Name PowerShellGet -Force -AllowClobber -Scope CurrentUser
+          Install-Module -Name PackageManagement -Force -AllowClobber -Scope CurrentUser
+          Install-Package -Name 'SQLite.UWP.2015' -Source 'https://api.nuget.org/v3/index.json' -Force -Scope CurrentUser
+        shell: pwsh
+
+      - name: Install Windows Mobile SDK
+        run: |
+          Start-Process -Wait -NoNewWindow -FilePath "C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\bin\x64\Dism.exe" -ArgumentList "/Online /Add-Package /PackagePath:'C:\ProgramData\Microsoft\Windows\Containers\ospackage.cab'"
+        shell: pwsh
         
       - name: Generate Self-Signed Certificate
         id: generate_cert
