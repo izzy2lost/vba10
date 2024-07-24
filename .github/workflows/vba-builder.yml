@@ -63,7 +63,8 @@ jobs:
             /p:AppxPackageTestDir="${{ env.PackageOutputRootDir }}\${{ env.PACKAGE_NAME }}" `
             /p:PlatformToolset=v143 `
             /p:WindowsTargetPlatformVersion=$env:TargetPlatformVersion `
-            /restore
+            /p:RestorePackagesConfig=true `
+            /restore 
         shell: pwsh
 
       - name: Clean the Package
