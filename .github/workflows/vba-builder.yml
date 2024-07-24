@@ -35,9 +35,14 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: Download Windows SDK
+        run: |
+          Invoke-WebRequest -Uri 'https://go.microsoft.com/fwlink/p/?LinkId=619296' -OutFile 'winsdksetup.exe'
+        shell: pwsh
+
       - name: Install Windows SDK
         run: |
-          choco install windows-adk-all --version=10.0.10240.0 -y
+          Start-Process -FilePath .\winsdksetup.exe -ArgumentList '/features OptionId.WindowsDesktopHeaders OptionId.WindowsDesktopLibs OptionId.WindowsDesktopTools OptionId.UWPManagedTools OptionId.UWPManagedTools OptionId.UWPManagedLibs OptionId.UWPHeaders OptionId.UWPLibs OptionId.UWPAppDeployment OptionId.WindowsAppCertKit OptionId.WindowsSDKDesktop OptionId.WindowsSDKDesktopCore OptionId.NetFX4Extended /quiet /norestart' -NoNewWindow -Wait
         shell: pwsh
 
       - name: Add msbuild to PATH
