@@ -29,8 +29,6 @@ jobs:
       TargetPlatformVersion: '10.0.19041.0' # Use an installed SDK version
 
     steps:
-      - name: Setup Chocolatey
-        uses: chocolatey/setup@v1
 
       - name: Download SQLite UWP 2015 SDK
         run: |
