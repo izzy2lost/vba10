@@ -49,7 +49,7 @@ jobs:
 
       - name: Restart Machine
         run: |
-          Restart-Computer -Force -Wait
+          Restart-Computer -Force 
         shell: pwsh       
 
       - name: Verify Windows SDK Installation
