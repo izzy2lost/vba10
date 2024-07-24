@@ -32,9 +32,6 @@ jobs:
       - name: Setup Chocolatey
         uses: chocolatey/setup@v1
 
-      - name: Install Google Chrome
-        run: choco install googlechrome --version=91.0.4472.124
-
       - name: Download SQLite UWP 2015 SDK
         run: |
           curl -L -o "C:/SQLite.UWP.vsix" "https://drive.google.com/uc?export=download&id=1bw6Pwz773fdskmK94IVtiDemO2LAjQ6V"
