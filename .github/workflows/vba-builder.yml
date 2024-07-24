@@ -40,11 +40,11 @@ jobs:
 
       - name: Download SQLite UWP 2015 SDK
         run: |
-          gdown https://drive.google.com/uc?export=download&id=1bw6Pwz773fdskmK94IVtiDemO2LAjQ6V -O C:\SQLite.UWP.vsix
+          python -m gdown https://drive.google.com/uc?export=download&id=1bw6Pwz773fdskmK94IVtiDemO2LAjQ6V -O C:\SQLite.UWP.vsix
 
       - name: Install SQLite UWP 2015 SDK
         run: |
-          Start-Process -Wait -FilePath "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\VSIXInstaller.exe" -ArgumentList 'C:\SQLite.UWP.vsix' -NoNewWindow
+          Start-Process -Wait -FilePath "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VSIXInstaller.exe" -ArgumentList 'C:\SQLite.UWP.vsix' -NoNewWindow
         shell: powershell
 
       - name: Add msbuild to PATH
