@@ -48,9 +48,8 @@ jobs:
 
       - name: Install required components
         run: |
-          $vsPath = & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -products * -requires Microsoft.VisualStudio.Component.Windows10SDK.19041 -property installationPath
-          Start-Process -Wait -NoNewWindow -FilePath "$vsPath\Common7\Tools\VsDevCmd.bat" -ArgumentList '-arch=x64'
-          Start-Process -Wait -NoNewWindow -FilePath "$vsPath\Common7\Tools\VsDevCmd.bat" -ArgumentList '-componentInstall Microsoft.VisualStudio.Component.UWP.VC.SQLite Microsoft.VisualStudio.Component.Windows10SDK.10240'
+          $vsPath = & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -products * -property installationPath
+          & "$vsPath\vs_installer.exe" modify --installPath $vsPath --add Microsoft.VisualStudio.Component.UWP.VC.SQLite --add Microsoft.VisualStudio.Component.Windows10SDK.10240 --quiet --wait
         shell: pwsh
 
       - name: Generate Self-Signed Certificate
