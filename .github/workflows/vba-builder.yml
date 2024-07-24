@@ -42,15 +42,15 @@ jobs:
           fetch-depth: 0
         
       - name: Install vswhere
-        run: |
-          choco install vswhere
+        run: choco install vswhere
         shell: pwsh
 
       - name: Install required components
         run: |
           $vsPath = & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -products * -property installationPath
-          & "$vsPath\vs_installer.exe" modify --installPath $vsPath --add Microsoft.VisualStudio.Component.UWP.VC.SQLite --add Microsoft.VisualStudio.Component.Windows10SDK.10240 --quiet --wait
-        shell: pwsh
+          & "$vsPath\Common7\Tools\VsDevCmd.bat" && `
+          vs_installer.exe modify --installPath $vsPath --add Microsoft.VisualStudio.Component.UWP.VC.SQLite --add Microsoft.VisualStudio.Component.Windows10SDK.10240 --quiet --wait
+        shell: cmd
 
       - name: Generate Self-Signed Certificate
         id: generate_cert
