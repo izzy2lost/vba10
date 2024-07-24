@@ -40,20 +40,19 @@ jobs:
         with:
           submodules: true 
           fetch-depth: 0
-
-      - name: Install SQLite UWP 2015 SDK
-        run: |
-          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
-          Install-Module -Name PowerShellGet -Force -AllowClobber -Scope CurrentUser
-          Install-Module -Name PackageManagement -Force -AllowClobber -Scope CurrentUser
-          Install-Package -Name 'SQLite.UWP.2015' -Source 'https://api.nuget.org/v3/index.json' -Force -Scope CurrentUser
-        shell: pwsh
-
-      - name: Install Windows Mobile SDK
-        run: |
-          Start-Process -Wait -NoNewWindow -FilePath "C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\bin\x64\Dism.exe" -ArgumentList "/Online /Add-Package /PackagePath:'C:\ProgramData\Microsoft\Windows\Containers\ospackage.cab'"
-        shell: pwsh
         
+      - name: Install vswhere
+        run: |
+          choco install vswhere
+        shell: pwsh
+
+      - name: Install required components
+        run: |
+          $vsPath = & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -products * -requires Microsoft.VisualStudio.Component.Windows10SDK.19041 -property installationPath
+          Start-Process -Wait -NoNewWindow -FilePath "$vsPath\Common7\Tools\VsDevCmd.bat" -ArgumentList '-arch=x64'
+          Start-Process -Wait -NoNewWindow -FilePath "$vsPath\Common7\Tools\VsDevCmd.bat" -ArgumentList '-componentInstall Microsoft.VisualStudio.Component.UWP.VC.SQLite Microsoft.VisualStudio.Component.Windows10SDK.10240'
+        shell: pwsh
+
       - name: Generate Self-Signed Certificate
         id: generate_cert
         run: |
