@@ -41,16 +41,18 @@ jobs:
           submodules: true 
           fetch-depth: 0
         
-      - name: Install vswhere
-        run: choco install vswhere
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force; `
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
         shell: pwsh
 
-      - name: Install required components
+      - name: Install required SDKs via Chocolatey
         run: |
-          $vsPath = & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -products * -property installationPath
-          & "$vsPath\Common7\Tools\VsDevCmd.bat" && `
-          vs_installer.exe modify --installPath $vsPath --add Microsoft.VisualStudio.Component.UWP.VC.SQLite --add Microsoft.VisualStudio.Component.Windows10SDK.10240 --quiet --wait
-        shell: cmd
+          choco install sqlite.uwp.v2015 -y
+          choco install windows-sdk-10.0.10240 -y
+        shell: pwsh
 
       - name: Generate Self-Signed Certificate
         id: generate_cert
