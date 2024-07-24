@@ -11,17 +11,17 @@ on:
         description: 'Package Name'
         required: true
         default: 'VBA'
-        
+
 jobs:
   build:
     runs-on: windows-latest
-    
+
     env:
       SolutionPath: VBA10.sln
       Platform: x64
       Configuration: Release
       BuildMode: SideLoadOnly
-      AppxBundle: Never      
+      AppxBundle: Never
       ProjectPath: VBA10.vcxproj
       ProjectDirectory: .\
       PackageOutputRootDir: C:\AppPackage
@@ -29,30 +29,26 @@ jobs:
       TargetPlatformVersion: '10.0.19041.0' # Use an installed SDK version
 
     steps:
+
+      - name: Download and Install SQLite UWP 2015 SDK
+        run: |
+          Invoke-WebRequest `
+            -Uri "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/SQLiteDevelopmentTeam/vsextensions/SQLiteforUniversalWindowsPlatform/3.38.0/vspackage" `
+            -OutFile "C:\SQLite.UWP.vsix"
+          Start-Process -Wait -FilePath "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\VSIXInstaller.exe" -ArgumentList 'C:\SQLite.UWP.vsix' -NoNewWindow
+        shell: powershell
+
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
-        
+
       - name: Setup NuGet.exe for use with actions
         uses: NuGet/setup-nuget@v1.1.1
-        
+
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          submodules: true 
+          submodules: true
           fetch-depth: 0
-        
-      - name: Install Chocolatey
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force; `
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-        shell: pwsh
-
-      - name: Install required SDKs via Chocolatey
-        run: |
-          choco install sqlite.uwp.v2015 -y
-          choco install windows-sdk-10.0.10240 -y
-        shell: pwsh
 
       - name: Generate Self-Signed Certificate
         id: generate_cert
@@ -66,22 +62,18 @@ jobs:
         run: |
           echo "PACKAGE_NAME=${{ github.event.inputs.package_name }}_${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
 
-      - name: Restore NuGet Packages
-        run: nuget restore $env:SolutionPath
-        shell: pwsh
-
       - name: App Build
         run: |
           & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\msbuild.exe" $env:SolutionPath `
-            /p:PlatformToolset=v143 `
-            /p:WindowsTargetPlatformVersion=$env:TargetPlatformVersion `
             /p:Platform=$env:Platform `
             /p:Configuration=$env:Configuration `
             /p:UapAppxPackageBuildMode=$env:BuildMode `
             /p:AppxBundle=$env:AppxBundle `
             /p:PackageCertificateThumbprint="${{ env.THUMBPRINT }}" `
             /p:AppxPackageTestDir="${{ env.PackageOutputRootDir }}\${{ env.PACKAGE_NAME }}" `
-            /t:Clean,Build
+            /p:PlatformToolset=v143 `
+            /p:WindowsTargetPlatformVersion=$env:TargetPlatformVersion `
+            /restore
         shell: pwsh
 
       - name: Clean the Package
@@ -102,7 +94,7 @@ jobs:
             exit 1
           }
         shell: pwsh
-          
+
       - name: Create Archive
         run: |
           $PackagePath = "${{ env.PackageOutputRootDir }}\${{ env.PACKAGE_NAME }}"
@@ -116,7 +108,7 @@ jobs:
             exit 1
           }
         shell: pwsh
-       
+
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
