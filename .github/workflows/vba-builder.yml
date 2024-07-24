@@ -41,6 +41,15 @@ jobs:
       - name: Setup NuGet.exe for use with actions
         uses: NuGet/setup-nuget@v1.1.1       
 
+      - name: Download SQLite UWP SDK
+        run: |
+          curl -L -o "C:\sqlite-uwp-3380000.vsix" "https://drive.google.com/uc?export=download&id=1bw6Pwz773fdskmK94IVtiDemO2LAjQ6V"
+        
+      - name: Install SQLite UWP SDK
+        run: |
+          & "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VSIXInstaller.exe" "C:\sqlite-uwp-3380000.vsix"
+        shell: pwsh
+
       - name: Generate Self-Signed Certificate
         id: generate_cert
         run: |
