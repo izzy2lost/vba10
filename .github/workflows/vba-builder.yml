@@ -26,7 +26,7 @@ jobs:
       ProjectDirectory: .\
       PackageOutputRootDir: C:\AppPackage
       PackageOutputDir: VBA
-      TargetPlatformVersion: '10.0.19041.0' # Use an installed SDK version
+      TargetPlatformVersion: '10.0.10240.0' # Specific SDK version
 
     steps:
       - name: Checkout Repository
@@ -43,6 +43,16 @@ jobs:
       - name: Install Windows SDK
         run: |
           Start-Process -FilePath .\winsdksetup.exe -ArgumentList '/features OptionId.WindowsDesktopHeaders OptionId.WindowsDesktopLibs OptionId.WindowsDesktopTools OptionId.UWPManagedTools OptionId.UWPManagedTools OptionId.UWPManagedLibs OptionId.UWPHeaders OptionId.UWPLibs OptionId.UWPAppDeployment OptionId.WindowsAppCertKit OptionId.WindowsSDKDesktop OptionId.WindowsSDKDesktopCore OptionId.NetFX4Extended /quiet /norestart' -NoNewWindow -Wait
+        shell: pwsh
+
+      - name: Verify Windows SDK Installation
+        run: |
+          if (Test-Path 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.10240.0') {
+            Write-Host "Windows SDK 10.0.10240.0 is installed."
+          } else {
+            Write-Host "Windows SDK 10.0.10240.0 is not installed."
+            exit 1
+          }
         shell: pwsh
 
       - name: Add msbuild to PATH
