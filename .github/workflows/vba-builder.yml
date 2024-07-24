@@ -29,17 +29,17 @@ jobs:
       TargetPlatformVersion: '10.0.19041.0' # Use an installed SDK version
 
     steps:
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
-
-      - name: Setup NuGet.exe for use with actions
-        uses: NuGet/setup-nuget@v1.1.1
-
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
           submodules: true
-          fetch-depth: 0     
+          fetch-depth: 0
+          
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup NuGet.exe for use with actions
+        uses: NuGet/setup-nuget@v1.1.1       
 
       - name: Generate Self-Signed Certificate
         id: generate_cert
