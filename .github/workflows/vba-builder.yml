@@ -47,7 +47,8 @@ jobs:
         
       - name: Install SQLite UWP SDK
         run: |
-          & "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VSIXInstaller.exe" "C:\sqlite-uwp-3380000.vsix"
+         $vsixPath = "C:\sqlite-uwp-3380000.vsix"
+         & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VSIXInstaller.exe" $vsixPath
         shell: pwsh
 
       - name: Generate Self-Signed Certificate
