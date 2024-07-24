@@ -29,12 +29,21 @@ jobs:
       TargetPlatformVersion: '10.0.19041.0' # Use an installed SDK version
 
     steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-      - name: Download and Install SQLite UWP 2015 SDK
+      - name: Install gdown
         run: |
-          Invoke-WebRequest `
-            -Uri "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/SQLiteDevelopmentTeam/vsextensions/SQLiteforUniversalWindowsPlatform/3.38.0/vspackage" `
-            -OutFile "C:\SQLite.UWP.vsix"
+          python -m pip install gdown
+
+      - name: Download SQLite UWP 2015 SDK
+        run: |
+          gdown https://drive.google.com/uc?export=download&id=1bw6Pwz773fdskmK94IVtiDemO2LAjQ6V -O C:\SQLite.UWP.vsix
+
+      - name: Install SQLite UWP 2015 SDK
+        run: |
           Start-Process -Wait -FilePath "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\VSIXInstaller.exe" -ArgumentList 'C:\SQLite.UWP.vsix' -NoNewWindow
         shell: powershell
 
