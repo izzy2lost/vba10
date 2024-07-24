@@ -34,22 +34,19 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
-          
+
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
 
       - name: Setup NuGet.exe for use with actions
-        uses: NuGet/setup-nuget@v1.1.1       
+        uses: NuGet/setup-nuget@v1.1.1
 
-      - name: Download SQLite UWP SDK
-        run: |
-          curl -L -o "C:\sqlite-uwp-3380000.vsix" "https://drive.google.com/uc?export=download&id=1bw6Pwz773fdskmK94IVtiDemO2LAjQ6V"
-        
       - name: Install SQLite UWP SDK
         run: |
-         $vsixPath = "C:\sqlite-uwp-3380000.vsix"
-         & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VSIXInstaller.exe" $vsixPath
-        shell: pwsh
+          # Download the VSIX package from the Visual Studio Marketplace
+          Invoke-WebRequest -Uri 'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/SQLiteDevelopmentTeam/vsextensions/SQLiteforUniversalWindowsPlatform/3.38.0/vspackage' -OutFile 'sqlite-uwp.vsix'
+          # Install the downloaded VSIX package
+          Start-Process -FilePath "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VSIXInstaller.exe" -ArgumentList '/quiet', 'sqlite-uwp.vsix' -Wait
 
       - name: Generate Self-Signed Certificate
         id: generate_cert
