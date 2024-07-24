@@ -37,8 +37,7 @@ jobs:
 
       - name: Install Windows SDK
         run: |
-          choco install windows-sdk-10-version-1903-all -y
-          choco install windows-sdk-10-version-2004-all -y
+          choco install windows-sdk-10-version-10240 -y
         shell: pwsh
 
       - name: Add msbuild to PATH
