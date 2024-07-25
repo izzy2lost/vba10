@@ -42,17 +42,8 @@ jobs:
 
       - name: Install Windows SDK
         run: |
-          Start-Process -FilePath .\winsdksetup.exe -ArgumentList '/features OptionId.WindowsDesktopHeaders OptionId.WindowsDesktopLibs OptionId.WindowsDesktopTools OptionId.UWPManagedTools OptionId.UWPManagedTools OptionId.UWPManagedLibs OptionId.UWPHeaders OptionId.UWPLibs OptionId.UWPAppDeployment OptionId.WindowsAppCertKit OptionId.WindowsSDKDesktop OptionId.WindowsSDKDesktopCore OptionId.NetFX4Extended /quiet /norestart /log log.txt' -NoNewWindow -Wait
-          Get-Content log.txt
-        shell: pwsh
-
-      - name: Restart Visual Studio
-        run: |
-          # Close all Visual Studio instances
-          Stop-Process -Name devenv -Force -ErrorAction SilentlyContinue
-          # Wait for a moment to ensure all instances are closed
-          Start-Sleep -Seconds 10
-        shell: pwsh   
+          choco install windows-sdk-10.1
+          choco install visualstudio2019-workload-vctools
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
