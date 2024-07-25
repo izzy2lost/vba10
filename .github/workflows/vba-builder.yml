@@ -26,7 +26,7 @@ jobs:
       ProjectDirectory: .\
       PackageOutputRootDir: C:\AppPackage
       PackageOutputDir: VBA
-      TargetPlatformVersion: '10.0.10240.0' # Specific SDK version
+      TargetPlatformVersion: '10.0.19041.0' # Updated to the newest SDK version
 
     steps:
       - name: Checkout Repository
