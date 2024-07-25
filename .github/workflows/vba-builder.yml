@@ -43,9 +43,18 @@ jobs:
       - name: Install Windows SDK
         run: |
           Start-Process -FilePath .\winsdksetup.exe -ArgumentList '/features OptionId.WindowsDesktopHeaders OptionId.WindowsDesktopLibs OptionId.WindowsDesktopTools OptionId.UWPManagedTools OptionId.UWPManagedTools OptionId.UWPManagedLibs OptionId.UWPHeaders OptionId.UWPLibs OptionId.UWPAppDeployment OptionId.WindowsAppCertKit OptionId.WindowsSDKDesktop OptionId.WindowsSDKDesktopCore OptionId.NetFX4Extended /quiet /norestart /log log.txt' -NoNewWindow -Wait
-          Start-Sleep -Seconds 300  # Sleep to give time for the installation to complete
           Get-Content log.txt
-        shell: pwsh      
+        shell: pwsh
+
+      - name: Restart Visual Studio
+        run: |
+          # Close all Visual Studio instances
+          Stop-Process -Name devenv -Force -ErrorAction SilentlyContinue
+          # Wait for a moment to ensure all instances are closed
+          Start-Sleep -Seconds 10
+          # Open Visual Studio again (assuming the path to VS executable is known)
+          Start-Process -FilePath "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\devenv.exe" -Wait
+        shell: pwsh
 
       - name: Verify Windows SDK Installation
         run: |
