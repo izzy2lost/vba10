@@ -52,17 +52,7 @@ jobs:
           Stop-Process -Name devenv -Force -ErrorAction SilentlyContinue
           # Wait for a moment to ensure all instances are closed
           Start-Sleep -Seconds 10
-        shell: pwsh
-
-      - name: Verify Windows SDK Installation
-        run: |
-          if (Test-Path 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.10240.0') {
-            Write-Host "Windows SDK 10.0.10240.0 is installed."
-          } else {
-            Write-Host "Windows SDK 10.0.10240.0 is not installed."
-            exit 1
-          }
-        shell: pwsh
+        shell: pwsh   
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
